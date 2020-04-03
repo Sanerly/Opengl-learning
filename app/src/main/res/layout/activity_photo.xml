@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".photo.PhotoActivity">
+    <com.vison.opengl_learning.photo.GlView
+        android:id="@+id/gl_photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:orientation="horizontal"
+     android:layout_height="wrap_content">
+     <Button
+         android:id="@+id/btn_1"
+         android:layout_width="wrap_content"
+         android:text="NONE"
+         android:layout_height="wrap_content"/>
+     <Button
+         android:id="@+id/btn_2"
+         android:layout_width="wrap_content"
+         android:text="BLUR"
+         android:layout_height="wrap_content"/>
+     <Button
+         android:id="@+id/btn_3"
+         android:layout_width="wrap_content"
+         android:text="COOL"
+         android:layout_height="wrap_content"/>
+     <Button
+         android:id="@+id/btn_4"
+         android:layout_width="wrap_content"
+         android:text="GRAY"
+         android:layout_height="wrap_content"/>
+ </LinearLayout>
+</FrameLayout>
