@@ -5,55 +5,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".egl.EGLActivity">
+
     <com.vison.opengl_learning.egl.view.GlESView
         android:id="@+id/gles_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:orientation="horizontal"
-      android:layout_height="wrap_content">
+        android:layout_height="match_parent" />
 
-      <Button
-          android:id="@+id/btn_record"
-          android:layout_width="wrap_content"
-          android:text="录制"
-          android:layout_height="wrap_content"/>
-      <Button
-          android:id="@+id/btn_stop"
-          android:layout_width="wrap_content"
-          android:text="停止"
-          android:layout_height="wrap_content"/>
-  </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录制" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止" />
+
+        <Button
+            android:id="@+id/btn_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拍照" />
+
+        <Button
+            android:id="@+id/btn_zoom_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/btn_zoom_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-" />
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_1"
             android:layout_width="wrap_content"
-            android:text="1"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="1" />
+
         <Button
             android:id="@+id/btn_2"
             android:layout_width="wrap_content"
-            android:text="2"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="2" />
 
         <Button
             android:id="@+id/btn_3"
             android:layout_width="wrap_content"
-            android:text="3"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="3" />
 
         <Button
             android:id="@+id/btn_4"
             android:layout_width="wrap_content"
-            android:text="4"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="4" />
     </LinearLayout>
 </FrameLayout>

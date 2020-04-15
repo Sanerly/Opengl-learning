@@ -15,13 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vison.opengl_learning.R;
 import com.vison.opengl_learning.egl.encoder.MediaEncoder;
-import com.vison.opengl_learning.egl.filter.type.Filter;
 import com.vison.opengl_learning.egl.filter.type.FilterType;
 import com.vison.opengl_learning.egl.manager.ParamsManager;
 import com.vison.opengl_learning.egl.manager.RecordManager;
 import com.vison.opengl_learning.egl.view.GlESView;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.ByteBuffer;
 
@@ -45,11 +43,18 @@ public class EGLActivity extends AppCompatActivity {
     Button btn3;
     @BindView(R.id.btn_4)
     Button btn4;
+    @BindView(R.id.btn_photo)
+    Button btnPhoto;
+    @BindView(R.id.btn_zoom_in)
+    Button btnZoomIn;
+    @BindView(R.id.btn_zoom_out)
+    Button btnZoomOut;
     private Bitmap mBitmap1;
     private Bitmap mBitmap2;
     private boolean isShow = false;
     private ByteBuffer buffer1;
     private ByteBuffer buffer2;
+    private String storagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +68,15 @@ public class EGLActivity extends AppCompatActivity {
 
         ParamsManager.context = this;
         ParamsManager.StoragePath = getExternalCacheDir().getPath();
+        storagePath = getExternalCacheDir().getPath() + "/";
         mBitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_trure);
-        buffer1=ByteBuffer.wrap(bitmap2RGB(mBitmap1));
+        buffer1 = ByteBuffer.wrap(bitmap2RGB(mBitmap1));
         mBitmap2 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_test);
-        buffer2=ByteBuffer.wrap(bitmap2RGB(mBitmap2));
+        buffer2 = ByteBuffer.wrap(bitmap2RGB(mBitmap2));
 
-        glesView.setBuffer(buffer1,mBitmap1.getWidth(),mBitmap1.getHeight());
+        glesView.setBuffer(buffer1, mBitmap1.getWidth(), mBitmap1.getHeight());
         mHandler.sendEmptyMessageDelayed(1, 1000);
+
 
     }
 
@@ -79,9 +86,9 @@ public class EGLActivity extends AppCompatActivity {
             if (message.what == 1) {
                 isShow = !isShow;
                 if (isShow) {
-                    glesView.setBuffer(buffer1,mBitmap1.getWidth(),mBitmap1.getHeight());
+                    glesView.setBuffer(buffer1, mBitmap1.getWidth(), mBitmap1.getHeight());
                 } else {
-                    glesView.setBuffer(buffer2,mBitmap2.getWidth(),mBitmap2.getHeight());
+                    glesView.setBuffer(buffer2, mBitmap2.getWidth(), mBitmap2.getHeight());
                 }
                 mHandler.sendEmptyMessageDelayed(1, 1000);
             }
@@ -89,7 +96,9 @@ public class EGLActivity extends AppCompatActivity {
         }
     });
 
-    @OnClick({R.id.btn_record, R.id.btn_stop,R.id.btn_1,R.id.btn_2,R.id.btn_3,R.id.btn_4})
+    @OnClick({R.id.btn_record, R.id.btn_stop, R.id.btn_1,
+            R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_photo,
+            R.id.btn_zoom_in, R.id.btn_zoom_out})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_record:
@@ -100,7 +109,6 @@ public class EGLActivity extends AppCompatActivity {
                 // 是否允许高清录制
                 RecordManager.getInstance().enableHighDefinition(false);
 
-                String storagePath = getExternalCacheDir().getPath() + "/";
 
                 File folder = new File(storagePath);
                 if (!folder.exists() && !folder.mkdirs()) {
@@ -145,8 +153,22 @@ public class EGLActivity extends AppCompatActivity {
                 break;
             case R.id.btn_stop:
                 glesView.setRecording(false);
-
                 RecordManager.getInstance().stopRecording();
+                break;
+            case R.id.btn_photo:
+
+                File folder2 = new File(storagePath);
+                if (!folder2.exists() && !folder2.mkdirs()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(EGLActivity.this, "无法保存照片", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
+                final String path = storagePath + System.currentTimeMillis() + "_2.jpeg";
+                glesView.callTakePicture(true, path);
                 break;
             case R.id.btn_1:
                 glesView.setFilterType(FilterType.NONE);
@@ -155,16 +177,22 @@ public class EGLActivity extends AppCompatActivity {
                 glesView.setFilterType(FilterType.BLACKWHITE);
                 break;
             case R.id.btn_3:
-                glesView.setFilterType(FilterType.COOL);
+                glesView.setFilterType(FilterType.SKETCH);
                 break;
             case R.id.btn_4:
-                glesView.setFilterType(FilterType.EVERGREEN);
+                glesView.setFilterType(FilterType.SPLITSCREEN);
+                break;
+            case R.id.btn_zoom_in:
+                zoomVal=zoomVal+0.1f;
+                glesView.setZoomScale(zoomVal);
+                break;
+            case R.id.btn_zoom_out:
+                zoomVal=zoomVal-0.1f;
+                glesView.setZoomScale(zoomVal);
                 break;
         }
     }
-
-
-
+        float zoomVal=1.0f;
 
     /**
      * @方法描述 Bitmap转RGB

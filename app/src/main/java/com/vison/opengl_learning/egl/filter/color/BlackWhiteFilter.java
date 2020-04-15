@@ -1,5 +1,7 @@
 package com.vison.opengl_learning.egl.filter.color;
 
+import android.util.Log;
+
 import com.vison.opengl_learning.egl.filter.base.AFilter;
 
 /**
@@ -11,8 +13,8 @@ public class BlackWhiteFilter extends AFilter {
 
     private static final String FRAGMENT_SHADER =
             "precision mediump float;\n" +
-            "uniform sampler2D vTexture;\n" +
-            "varying vec2 aCoordinate;\n" +
+            "uniform sampler2D uTexture;\n" +
+            "varying vec2 vCoordinate;\n" +
             "\n" +
             "vec4 calVignette(vec2 coord,vec4 color,float texture_width,float texture_height) {\n" +
             "float shade = 0.6;\n" +
@@ -79,13 +81,13 @@ public class BlackWhiteFilter extends AFilter {
             "return color;\n" +
             "}\n" +
             "void main() {\n" +
-            "vec4 color = texture2D(vTexture, aCoordinate);\n" +
+            "vec4 color = texture2D(uTexture, vCoordinate);\n" +
             "float gray = dot(color.rgb, vec3(0.229, 0.587, 0.114));\n" +
             "float exposure = gray * 1.33;\n" +
             "color.r = exposure;\n" +
             "color.g = exposure;\n" +
             "color.b = exposure;\n" +
-            "color = calVignette2(color, aCoordinate, 0.5);\n" +
+            "color = calVignette2(color, vCoordinate, 0.5);\n" +
             "color = calBrightnessContract(color, 0.0, 16.0, 128.0);\n" +
             "gl_FragColor = color;\n" +
             "}\n" +
@@ -98,4 +100,5 @@ public class BlackWhiteFilter extends AFilter {
     public BlackWhiteFilter(String vertexShader, String fragmentShader) {
         super(vertexShader, fragmentShader);
     }
+
 }

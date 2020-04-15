@@ -19,19 +19,18 @@ public class DefaultFilterGroup extends AFilterGroup {
     private static final int ColorIndex = 0;
 
 
-
     public DefaultFilterGroup() {
         this(initFilters());
     }
 
-    private DefaultFilterGroup(List<AFilter> filters) {
+    public DefaultFilterGroup(List<AFilter> filters) {
         mFilters = filters;
     }
 
 
     private static List<AFilter> initFilters() {
         List<AFilter> filters = new ArrayList<>();
-        filters.add(ColorIndex, FilterManager.getFilter(FilterType.SOURCE));
+        filters.add(ColorIndex, FilterManager.getFilter(FilterType.NONE));
         return filters;
     }
 
@@ -43,6 +42,12 @@ public class DefaultFilterGroup extends AFilterGroup {
         }
     }
 
+    @Override
+    public void changeZoomScale(float scale) {
+        if (mFilters != null) {
+            mFilters.get(ColorIndex).setZoomScale(scale);
+        }
+    }
 
     /**
      * 切换颜色滤镜

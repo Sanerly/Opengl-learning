@@ -229,6 +229,8 @@ public abstract class AFilterGroup extends AFilter {
 
     public abstract void changeFilter(FilterType type);
 
+    public abstract void changeZoomScale(float scale);
+
     /**
      * 添加Framebuffer
      */
@@ -290,5 +292,9 @@ public abstract class AFilterGroup extends AFilter {
      */
     public int getCurrentTextureId() {
         return mCurrentTextureId;
+    }
+
+    public List<AFilter> getFilters() {
+        return mFilters;
     }
 }

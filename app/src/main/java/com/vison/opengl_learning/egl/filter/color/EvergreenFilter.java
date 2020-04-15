@@ -14,9 +14,9 @@ public class EvergreenFilter extends AFilter {
 
     private static final String FRAGMENT_SHADER =
             "precision highp float;\n" +
-            "varying highp vec2 aCoordinate;\n" +
+            "varying highp vec2 vCoordinate;\n" +
             "\n" +
-            "uniform sampler2D vTexture;\n" +
+            "uniform sampler2D uTexture;\n" +
             "uniform sampler2D curveTexture;//curve\n" +
             "\n" +
             "vec3 RGBtoHSL(vec3 c) \n" +
@@ -41,14 +41,14 @@ public class EvergreenFilter extends AFilter {
             "{ \n" +
             "float GreyVal; \n" +
             "lowp vec4 textureColor; \n" +
-            "float xCoordinate = aCoordinate.x;\n" +
-            "float yCoordinate = aCoordinate.y;\n" +
+            "float xCoordinate = vCoordinate.x;\n" +
+            "float yCoordinate = vCoordinate.y;\n" +
             "\n" +
             "highp float redCurveValue; \n" +
             "highp float greenCurveValue;\n" +
             "highp float blueCurveValue; \n" +
             "\n" +
-            "textureColor = texture2D( vTexture, vec2(xCoordinate, yCoordinate));\n" +
+            "textureColor = texture2D( uTexture, vec2(xCoordinate, yCoordinate));\n" +
             "\n" +
             "vec3 tColor = vec3(textureColor.r, textureColor.g, textureColor.b); \n" +
             "\n" +

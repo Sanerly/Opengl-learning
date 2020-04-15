@@ -6,10 +6,13 @@ import com.vison.opengl_learning.egl.filter.color.BlackWhiteFilter;
 import com.vison.opengl_learning.egl.filter.color.CoolFilter;
 import com.vison.opengl_learning.egl.filter.color.DisplayFilter;
 import com.vison.opengl_learning.egl.filter.color.EvergreenFilter;
+import com.vison.opengl_learning.egl.filter.color.SketchFilter;
+import com.vison.opengl_learning.egl.filter.color.SplitScreenFilter;
 import com.vison.opengl_learning.egl.filter.type.FilterIndex;
 import com.vison.opengl_learning.egl.filter.type.FilterType;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Filter管理类
@@ -51,6 +54,7 @@ public final class FilterManager {
         mIndexMap.put(FilterType.SUNSET, FilterIndex.ColorIndex);
         mIndexMap.put(FilterType.WHITECAT, FilterIndex.ColorIndex);
         mIndexMap.put(FilterType.WHITENORREDDEN, FilterIndex.ColorIndex);
+        mIndexMap.put(FilterType.SPLITSCREEN, FilterIndex.ColorIndex);
     }
 
     private FilterManager() {
@@ -68,6 +72,11 @@ public final class FilterManager {
             // 常绿
             case EVERGREEN:
                 return new EvergreenFilter();
+            //  素描
+            case SKETCH:
+                return new SketchFilter();
+            case SPLITSCREEN:
+                return new SplitScreenFilter();
             case NONE:      // 没有滤镜
             case SOURCE:    // 原图
                 return new DisplayFilter();

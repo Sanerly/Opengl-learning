@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 
 import com.vison.opengl_learning.egl.filter.type.Filter;
 import com.vison.opengl_learning.egl.filter.type.FilterType;
+import com.vison.opengl_learning.egl.filter.type.ScaleType;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -17,7 +18,7 @@ import java.nio.ByteBuffer;
  * @CreateDate: 2020/1/10 17:05
  * @Description: 类描述
  */
-public class GlESView extends GLSurfaceView {
+public class GlESView extends GLSurfaceView implements IGlCommon{
 
     private SurfaceRenderer mFilterRender;
     private Context mContext;
@@ -33,7 +34,7 @@ public class GlESView extends GLSurfaceView {
 
     private void init(Context context) {
         mContext = context;
-        mFilterRender = new SurfaceRenderer(context);
+        mFilterRender = new SurfaceRenderer();
         setEGLContextClientVersion(2);
         setRenderer(mFilterRender);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -41,22 +42,34 @@ public class GlESView extends GLSurfaceView {
     }
 
 
-//    public void setFilter(Filter xfilter) {
-//        mFilterRender.setFilter(xfilter);
-//        requestRender();
-//    }
 
-    public void setBuffer(ByteBuffer buffer,int width, int height) {
+
+    @Override
+    public void setBuffer(ByteBuffer buffer, int width, int height) {
         mFilterRender.setBuffer(buffer,width,height);
         requestRender();
     }
 
+    @Override
     public void setRecording(boolean recording) {
         mFilterRender.setRecording(recording);
     }
 
+    @Override
+    public void callTakePicture(boolean takePicture, String picturePath) {
+        mFilterRender.callTakePicture(takePicture,picturePath);
+    }
+
+    @Override
     public void setFilterType(FilterType type) {
         mFilterRender.setFilterType(type);
         requestRender();
     }
+
+    @Override
+    public void setZoomScale(float scale) {
+        mFilterRender.setZoomScale(scale);
+        requestRender();
+    }
+
 }

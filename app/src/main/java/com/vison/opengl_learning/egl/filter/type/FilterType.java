@@ -53,9 +53,5 @@ public enum FilterType {
     SUNSET,         // 日落
     WHITECAT,       // 白猫
     WHITENORREDDEN, // 白皙还是红润
-
-
-
-
-
+    SPLITSCREEN,    // 分屏
 }

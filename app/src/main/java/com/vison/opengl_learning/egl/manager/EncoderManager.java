@@ -4,7 +4,6 @@ import android.opengl.EGLContext;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.vison.opengl_learning.egl.ScaleType;
 import com.vison.opengl_learning.egl.encoder.MediaAudioEncoder;
 import com.vison.opengl_learning.egl.encoder.MediaEncoder;
 import com.vison.opengl_learning.egl.encoder.MediaMuxerWrapper;
@@ -39,7 +38,7 @@ public class EncoderManager {
     // 码率乘高清值
     private int HDValue = 16;
 
-     //渲染Texture的宽度
+    //渲染Texture的宽度
     private int mTextureWidth;
     // 渲染Texture的高度
     private int mTextureHeight;
@@ -51,12 +50,13 @@ public class EncoderManager {
     private int mDisplayWidth;
     // 显示高度
     private int mDisplayHeight;
-    // 缩放方式
-    private ScaleType mScaleType = ScaleType.CENTER_CROP;
 
+    //核心EGL状态
     private EglCore mEglCore;
+
     // 录制视频用的EGLSurface
     private WindowSurface mRecordWindowSurface;
+
     // 录制的Filter
     private AFilter mEncoderFilter;
 
@@ -86,6 +86,7 @@ public class EncoderManager {
     /**
      * 初始化录制器，此时耗时大约280ms左右
      * 如果放在渲染线程里执行，会导致一开始录制出来的视频开头严重掉帧
+     *
      * @param width
      * @param height
      */
@@ -96,6 +97,7 @@ public class EncoderManager {
     /**
      * 初始化录制器，耗时大约208ms左右
      * 如果放在渲染线程里面执行，会导致一开始录制出来的视频开头严重掉帧
+     *
      * @param width
      * @param height
      * @param listener
@@ -134,6 +136,7 @@ public class EncoderManager {
 
     /**
      * 设置渲染Texture的宽高
+     *
      * @param width
      * @param height
      */
@@ -144,6 +147,7 @@ public class EncoderManager {
 
     /**
      * 设置预览大小
+     *
      * @param width
      * @param height
      */
@@ -169,8 +173,9 @@ public class EncoderManager {
 //        final double height = scale * mVideoHeight;
 //        Matrix.scaleM(mvpMatrix, 0, (float)(width / mDisplayWidth),
 //                (float)(height / mDisplayHeight), 1.0f);
-//        if (mRecordFilter != null) {
-//            mAFilter.setMatrix(mvpMatrix);
+//        if (mEncoderFilter != null) {
+//            mEncoderFilter.setModelScale(4f);
+//            mEncoderFilter.calculateMVPMatrix();
 //        }
     }
 
@@ -217,8 +222,9 @@ public class EncoderManager {
 
     /**
      * 发送渲染指令
+     *
      * @param currentTexture 当前Texture
-     * @param timeStamp 时间戳
+     * @param timeStamp      时间戳
      */
     public void drawRecorderFrame(int currentTexture, long timeStamp) {
         if (mRecordWindowSurface != null) {
@@ -272,7 +278,6 @@ public class EncoderManager {
         if (mEncoderFilter == null) {
             mEncoderFilter = new AFilter();
         }
-//        mEncoderFilter.setFilter(Filter.BLUR);
         mEncoderFilter.onInputSizeChanged(mTextureWidth, mTextureHeight);
         mEncoderFilter.onDisplayChanged(mVideoWidth, mVideoHeight);
     }
@@ -314,6 +319,7 @@ public class EncoderManager {
 
     /**
      * 设置视频帧率
+     *
      * @param frameRate
      */
     public void setFrameRate(int frameRate) {
@@ -322,6 +328,7 @@ public class EncoderManager {
 
     /**
      * 是否允许录制高清视频
+     *
      * @param enable
      */
     public void enableHighDefinition(boolean enable) {
@@ -331,6 +338,7 @@ public class EncoderManager {
 
     /**
      * 是否允许录音
+     *
      * @param enable
      */
     public void setEnableAudioRecording(boolean enable) {
@@ -339,6 +347,7 @@ public class EncoderManager {
 
     /**
      * 设置输出路径
+     *
      * @param path
      * @return
      */

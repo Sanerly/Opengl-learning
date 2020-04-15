@@ -1,6 +1,7 @@
 package com.vison.opengl_learning.egl.gles;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -507,35 +508,35 @@ public class GlUtils {
         return textureHandle[0];
     }
 
-//    /**
-//     * 加载mipmap纹理
-//     * @param context
-//     * @param name
-//     * @return
-//     */
-//    public static int createTextureFromAssets(Context context, String name) {
-//        int[] textureHandle = new int[1];
-//        GLES20.glGenTextures(1, textureHandle, 0);
-//        if (textureHandle[0] != 0) {
-//            Bitmap bitmap = BitmapUtils.getImageFromAssetsFile(context, name);
-//            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-//
-//            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-//                    GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-//            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-//                    GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-//            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-//                    GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-//            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-//                    GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-//            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-//            bitmap.recycle();
-//        }
-//        if (textureHandle[0] == 0) {
-//            throw new RuntimeException("Error loading texture.");
-//        }
-//        return textureHandle[0];
-//    }
+    /**
+     * 加载mipmap纹理
+     * @param context
+     * @param name
+     * @return
+     */
+    public static int createTextureFromAssets(Context context, String name) {
+        int[] textureHandle = new int[1];
+        GLES20.glGenTextures(1, textureHandle, 0);
+        if (textureHandle[0] != 0) {
+            Bitmap bitmap = getImageFromAssetsFile(context, name);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            bitmap.recycle();
+        }
+        if (textureHandle[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        }
+        return textureHandle[0];
+    }
 
     /**
      * 创建OES 类型的Texture
@@ -582,7 +583,24 @@ public class GlUtils {
         GLES20.glUniform1i(location, index);
     }
 
-
+    /**
+     * 加载Assets文件夹下的图片
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static Bitmap getImageFromAssetsFile(Context context, String fileName) {
+        Bitmap bitmap = null;
+        AssetManager manager = context.getResources().getAssets();
+        try {
+            InputStream is = manager.open(fileName);
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
 
     /**
      * 获取出错信息

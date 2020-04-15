@@ -13,9 +13,9 @@ import com.vison.opengl_learning.egl.gles.GlUtils;
 public class CoolFilter extends AFilter {
     private static final String FRAGMENT_SHADER =
             "precision highp float;\n" +
-            "varying highp vec2 aCoordinate;\n" +
+            "varying highp vec2 vCoordinate;\n" +
             "\n" +
-            "uniform sampler2D vTexture;\n" +
+            "uniform sampler2D uTexture;\n" +
             "uniform sampler2D curveTexture;//curve\n" +
             "\n" +
             "void main()\n" +
@@ -23,14 +23,14 @@ public class CoolFilter extends AFilter {
             "lowp vec4 textureColor;\n" +
             "lowp vec4 textureColorOri;\n" +
             "\n" +
-            "float xCoordinate = aCoordinate.x;\n" +
-            "float yCoordinate = aCoordinate.y;\n" +
+            "float xCoordinate = vCoordinate.x;\n" +
+            "float yCoordinate = vCoordinate.y;\n" +
             "\n" +
             "highp float redCurveValue;\n" +
             "highp float greenCurveValue;\n" +
             "highp float blueCurveValue;\n" +
             "\n" +
-            "textureColor = texture2D( vTexture, vec2(xCoordinate, yCoordinate));\n" +
+            "textureColor = texture2D( uTexture, vec2(xCoordinate, yCoordinate));\n" +
             "textureColorOri = textureColor;\n" +
             "\n" +
             "redCurveValue = texture2D(curveTexture, vec2(textureColor.r, 0.0)).r;\n" +

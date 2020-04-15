@@ -20,37 +20,37 @@ public final class RecordManager {
     private static final String TAG = "RecordManager";
     private static final boolean VERBOSE = false;
 
-    public static final int RECORD_WIDTH = 2160;
-    public static final int RECORD_HEIGHT = 3840;
+    public static final int RECORD_WIDTH = 1080;
+    public static final int RECORD_HEIGHT = 1920;
 
     private static RecordManager mInstance;
 
     // 初始化录制器
-    static final int MSG_INIT_RECORDER = 0;
+    private static final int MSG_INIT_RECORDER = 0;
     // 开始录制
-    static final int MSG_START_RECORDING = 1;
+    private static final int MSG_START_RECORDING = 1;
     // 帧可用
-    static final int MSG_FRAME_AVAILABLE = 2;
+    private static final int MSG_FRAME_AVAILABLE = 2;
     // 渲染帧
-    static final int MSG_DRAW_FRAME = 3;
+    private static final int MSG_DRAW_FRAME = 3;
     // 停止录制
-    static final int MSG_STOP_RECORDING = 4;
+    private static final int MSG_STOP_RECORDING = 4;
     // 暂停录制
-    static final int MSG_PAUSE_RECORDING = 5;
+    private static final int MSG_PAUSE_RECORDING = 5;
     // 继续录制
-    static final int MSG_CONTINUE_RECORDING = 6;
+    private static final int MSG_CONTINUE_RECORDING = 6;
     // 设置帧率
-    static final int MSG_FRAME_RATE = 7;
+    private static final int MSG_FRAME_RATE = 7;
     // 是否允许录制高清视频
-    static final int MSG_HIGHTDEFINITION = 8;
+    private static final int MSG_HIGHTDEFINITION = 8;
     // 是否允许录制
-    static final int MSG_ENABLE_AUDIO = 9;
+    private static final int MSG_ENABLE_AUDIO = 9;
     // 退出
-    static final int MSG_QUIT = 10;
+    private static final int MSG_QUIT = 10;
     // 设置渲染Texture的宽高
-    static final int MSG_SET_TEXTURE_SIZE = 11;
+    private static final int MSG_SET_TEXTURE_SIZE = 11;
     // 设置预览大小
-    static final int MSG_SET_DISPLAY_SIZE = 12;
+    private static final int MSG_SET_DISPLAY_SIZE = 12;
 
     // 录制线程
     private RecordThread mRecordThread;
@@ -64,7 +64,8 @@ public final class RecordManager {
         return mInstance;
     }
 
-    private RecordManager() {}
+    private RecordManager() {
+    }
 
     /**
      * 初始化录制线程
@@ -77,6 +78,7 @@ public final class RecordManager {
 
     /**
      * 初始化录制器，此时耗时大约200ms左右，不能放在跟渲染线程同一个Looper里面
+     *
      * @param width
      * @param height
      */
@@ -87,6 +89,7 @@ public final class RecordManager {
 
     /**
      * 初始化录制器，此时耗时大约200ms左右，不能放在跟渲染线程同一个Looper里面
+     *
      * @param width
      * @param height
      * @param listener
@@ -101,6 +104,7 @@ public final class RecordManager {
 
     /**
      * 设置渲染Texture的宽高
+     *
      * @param width
      * @param height
      */
@@ -113,6 +117,7 @@ public final class RecordManager {
 
     /**
      * 设置预览大小
+     *
      * @param width
      * @param height
      */
@@ -125,6 +130,7 @@ public final class RecordManager {
 
     /**
      * 开始录制
+     *
      * @param sharedContext EGLContext上下文包装类
      */
     public void startRecording(EGLContext sharedContext) {
@@ -147,7 +153,8 @@ public final class RecordManager {
 
     /**
      * 发送渲染指令
-     * @param texture 当前Texture
+     *
+     * @param texture   当前Texture
      * @param timeStamp 时间戳
      */
     public void drawRecorderFrame(int texture, long timeStamp) {
@@ -197,6 +204,7 @@ public final class RecordManager {
 
     /**
      * 设置帧率
+     *
      * @param frameRate
      */
     public void setFrameRate(int frameRate) {
@@ -209,6 +217,7 @@ public final class RecordManager {
 
     /**
      * 是否允许录制高清视频
+     *
      * @param enable
      */
     public void enableHighDefinition(boolean enable) {
@@ -220,6 +229,7 @@ public final class RecordManager {
 
     /**
      * 是否允许录音
+     *
      * @param enable
      */
     public void setEnableAudioRecording(boolean enable) {
@@ -231,6 +241,7 @@ public final class RecordManager {
 
     /**
      * 获取输出路径
+     *
      * @return
      */
     public String getOutputPath() {
@@ -239,6 +250,7 @@ public final class RecordManager {
 
     /**
      * 设置输出路径
+     *
      * @param path
      */
     public void setOutputPath(String path) {
@@ -294,6 +306,7 @@ public final class RecordManager {
 
         /**
          * 初始化录制器
+         *
          * @param width
          * @param height
          * @param listener
@@ -310,6 +323,7 @@ public final class RecordManager {
 
         /**
          * 设置渲染Texture的宽高
+         *
          * @param width
          * @param height
          */
@@ -324,6 +338,7 @@ public final class RecordManager {
 
         /**
          * 设置预览大小
+         *
          * @param width
          * @param height
          */
@@ -338,6 +353,7 @@ public final class RecordManager {
 
         /**
          * 开始录制
+         *
          * @param eglContext EGLContext上下文包装类
          */
         void startRecording(EGLContext eglContext) {
@@ -364,8 +380,9 @@ public final class RecordManager {
 
         /**
          * 发送渲染指令
+         *
          * @param currentTexture 当前Texture
-         * @param timeStamp 时间戳
+         * @param timeStamp      时间戳
          */
         void drawRecordingFrame(int currentTexture, long timeStamp) {
             if (VERBOSE) {
@@ -416,6 +433,7 @@ public final class RecordManager {
 
         /**
          * 设置帧率
+         *
          * @param frameRate
          */
         void setFrameRate(int frameRate) {
@@ -430,6 +448,7 @@ public final class RecordManager {
 
         /**
          * 是否允许录制高清视频
+         *
          * @param enable
          */
         void enableHighDefinition(boolean enable) {
@@ -444,6 +463,7 @@ public final class RecordManager {
 
         /**
          * 是否允许录音
+         *
          * @param enable
          */
         void setEnableAudioRecording(boolean enable) {
