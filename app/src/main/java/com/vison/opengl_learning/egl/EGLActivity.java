@@ -69,9 +69,9 @@ public class EGLActivity extends AppCompatActivity {
         ParamsManager.context = this;
         ParamsManager.StoragePath = getExternalCacheDir().getPath();
         storagePath = getExternalCacheDir().getPath() + "/";
-        mBitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_trure);
+        mBitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_test1);
         buffer1 = ByteBuffer.wrap(bitmap2RGB(mBitmap1));
-        mBitmap2 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_test);
+        mBitmap2 = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_test2);
         buffer2 = ByteBuffer.wrap(bitmap2RGB(mBitmap2));
 
         glesView.setBuffer(buffer1, mBitmap1.getWidth(), mBitmap1.getHeight());
@@ -171,7 +171,7 @@ public class EGLActivity extends AppCompatActivity {
                 glesView.callTakePicture(true, path);
                 break;
             case R.id.btn_1:
-                glesView.setFilterType(FilterType.NONE);
+                glesView.setFilterType(FilterType.SOURCE);
                 break;
             case R.id.btn_2:
                 glesView.setFilterType(FilterType.BLACKWHITE);

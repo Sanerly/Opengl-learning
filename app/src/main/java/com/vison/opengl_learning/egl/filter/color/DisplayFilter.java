@@ -8,4 +8,12 @@ import com.vison.opengl_learning.egl.filter.base.AFilter;
  * @Description: 原图
  */
 public class DisplayFilter extends AFilter {
+
+    public DisplayFilter() {
+        this(VERTEX_SHADER, FRAGMENT_SHADER_2D);
+    }
+
+    public DisplayFilter(String vertex, String fragment) {
+        super(vertex, fragment);
+    }
 }

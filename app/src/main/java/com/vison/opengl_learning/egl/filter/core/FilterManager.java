@@ -77,7 +77,6 @@ public final class FilterManager {
                 return new SketchFilter();
             case SPLITSCREEN:
                 return new SplitScreenFilter();
-            case NONE:      // 没有滤镜
             case SOURCE:    // 原图
                 return new DisplayFilter();
             default:
