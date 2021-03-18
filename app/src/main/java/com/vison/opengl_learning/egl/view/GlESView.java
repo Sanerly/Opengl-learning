@@ -1,16 +1,11 @@
 package com.vison.opengl_learning.egl.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.opengl.EGLContext;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.vison.opengl_learning.egl.filter.type.Filter;
 import com.vison.opengl_learning.egl.filter.type.FilterType;
-import com.vison.opengl_learning.egl.filter.type.ScaleType;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 /**
@@ -18,7 +13,7 @@ import java.nio.ByteBuffer;
  * @CreateDate: 2020/1/10 17:05
  * @Description: 类描述
  */
-public class GlESView extends GLSurfaceView implements IGlCommon{
+public class GlESView extends GLSurfaceView implements IGlCommon {
 
     private SurfaceRenderer mFilterRender;
     private Context mContext;
@@ -42,11 +37,9 @@ public class GlESView extends GLSurfaceView implements IGlCommon{
     }
 
 
-
-
     @Override
     public void setBuffer(ByteBuffer buffer, int width, int height) {
-        mFilterRender.setBuffer(buffer,width,height);
+        mFilterRender.setBuffer(buffer, width, height);
         requestRender();
     }
 
@@ -57,7 +50,7 @@ public class GlESView extends GLSurfaceView implements IGlCommon{
 
     @Override
     public void callTakePicture(boolean takePicture, String picturePath) {
-        mFilterRender.callTakePicture(takePicture,picturePath);
+        mFilterRender.callTakePicture(takePicture, picturePath);
     }
 
     @Override
@@ -72,4 +65,18 @@ public class GlESView extends GLSurfaceView implements IGlCommon{
         requestRender();
     }
 
+
+    public void setTranslation(float translationX, float translationY) {
+        mFilterRender.setTranslation(translationX, translationY);
+        requestRender();
+    }
+
+
+    public int getZoomWidth() {
+        return mFilterRender.getZoomWidth();
+    }
+
+    public int getZoomHeight() {
+        return mFilterRender.getZoomHeight();
+    }
 }

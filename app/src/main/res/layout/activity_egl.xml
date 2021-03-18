@@ -13,39 +13,77 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_record"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="录制" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="停止" />
+            <Button
+                android:id="@+id/btn_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="录制" />
 
-        <Button
-            android:id="@+id/btn_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拍照" />
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="停止" />
 
-        <Button
-            android:id="@+id/btn_zoom_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+" />
+            <Button
+                android:id="@+id/btn_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拍照" />
 
-        <Button
-            android:id="@+id/btn_zoom_out"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btn_zoom_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/btn_zoom_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="-" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_translation_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="↑" />
+
+            <Button
+                android:id="@+id/btn_translation_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="↓" />
+
+            <Button
+                android:id="@+id/btn_translation_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="←" />
+
+            <Button
+                android:id="@+id/btn_translation_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="→" />
+
+
+        </LinearLayout>
     </LinearLayout>
+
 
 
     <LinearLayout

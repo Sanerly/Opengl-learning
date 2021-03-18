@@ -26,8 +26,13 @@
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/btn_av"
+    android:id="@+id/btn_av"
+    android:layout_width="match_parent"
+    android:text="录制音视频"
+    android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_encode"
         android:layout_width="match_parent"
-        android:text="录制音视频"
+        android:text="编解码"
         android:layout_height="wrap_content"/>
 </LinearLayout>

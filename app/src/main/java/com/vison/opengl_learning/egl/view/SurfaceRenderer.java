@@ -1,22 +1,19 @@
 package com.vison.opengl_learning.egl.view;
 
-import android.content.Context;
-import android.graphics.Matrix;
 import android.opengl.EGL14;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.vison.opengl_learning.egl.filter.base.AFilter;
 import com.vison.opengl_learning.egl.filter.base.AFilterGroup;
 import com.vison.opengl_learning.egl.filter.core.FilterManager;
 import com.vison.opengl_learning.egl.filter.type.FilterType;
-import com.vison.opengl_learning.egl.filter.type.ScaleType;
-import com.vison.opengl_learning.egl.gles.GlUtils;
-import com.vison.opengl_learning.egl.gles.MatrixUtils;
-import com.vison.opengl_learning.egl.gles.TakePictureUtils;
-import com.vison.opengl_learning.egl.gles.TextureRotationUtils;
+import com.vison.opengl_learning.egl.util.GlUtils;
+import com.vison.opengl_learning.egl.util.TakePictureUtils;
+import com.vison.opengl_learning.egl.util.TextureRotationUtils;
 import com.vison.opengl_learning.egl.manager.RecordManager;
 
 import java.io.File;
@@ -54,6 +51,10 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
     // 显示大小
     private int mDisplayWidth;
     private int mDisplayHeight;
+
+    //
+    private int mZoomWidth;
+    private int mZoomHeight;
     //数据buffer
     private ByteBuffer mByteBuffer;
     //滤镜类型
@@ -62,7 +63,7 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
     private FloatBuffer mVertexArray;
     //纹理坐标Buffer
     private FloatBuffer mTexCoordArray;
-    private float mZoomScale;
+    private float mZoomScale=1;
 
 
     public SurfaceRenderer() {
@@ -84,10 +85,13 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
+        GLES20.glViewport(0, 0, width, height);
         onInputSizeChanged(mTextureWidth, mTextureHeight);
         onDisplaySizeChanged(width, height);
     }
 
+    private float mTranslationX=0f;
+    private float mTranslationY=0f;
 
     @Override
     public void onDrawFrame(GL10 gl10) {
@@ -97,14 +101,16 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
 //        // 如果存在滤镜，则绘制滤镜
         if (mRealTimeFilter != null) {
             mRealTimeFilter.changeFilter(mFilterType);
-            mRealTimeFilter.changeZoomScale(mZoomScale);
             mCurrentTextureId = mRealTimeFilter.drawFrameBuffer(textureId, mVertexArray, mTexCoordArray);
         }
 
 
         // 显示输出，需要调整视口大小
         if (mDisplayFilter != null) {
-            GLES30.glViewport(0, 0, mDisplayWidth, mDisplayHeight);
+
+            GLES30.glViewport(0, 0, mDisplayWidth,mDisplayHeight);
+            mDisplayFilter.setZoomScale(mZoomScale);
+            mDisplayFilter.setTranslation(mTranslationX,mTranslationY);
             mDisplayFilter.drawFrame(mCurrentTextureId);
         }
 
@@ -158,6 +164,11 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
         mZoomScale = scale;
     }
 
+    public void setTranslation(float translationX,float translationY) {
+        this.mTranslationX = translationX;
+        this.mTranslationY = translationY;
+    }
+
     private void texImage2D() {
         GLES20.glTexImage2D(mRealTimeFilter.getTextureType(), 0, GLES20.GL_RGB, mTextureWidth,
                 mTextureHeight, 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_BYTE, mByteBuffer);
@@ -199,4 +210,11 @@ public class SurfaceRenderer implements GLSurfaceView.Renderer, IGlCommon {
         }
     }
 
+    public int getZoomWidth() {
+        return mZoomWidth;
+    }
+
+    public int getZoomHeight() {
+        return mZoomHeight;
+    }
 }

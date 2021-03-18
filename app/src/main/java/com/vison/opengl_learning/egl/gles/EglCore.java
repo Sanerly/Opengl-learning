@@ -27,6 +27,8 @@ import android.opengl.EGLSurface;
 import android.util.Log;
 import android.view.Surface;
 
+import com.vison.opengl_learning.egl.util.GlUtils;
+
 /**
  * Core EGL state (display, context, config).
  * <p>

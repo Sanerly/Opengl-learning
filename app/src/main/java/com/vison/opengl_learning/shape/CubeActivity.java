@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,7 +90,11 @@ public class CubeActivity extends AppCompatActivity implements GLSurfaceView.Ren
     private float[] mViewMatrix = new float[16];
     private float[] mProjectMatrix = new float[16];
     private float[] mMVPMatrix = new float[16];
-
+    private float[] mModelMatrix =     //原始矩阵
+            {1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1};
 
     //句柄
     private int mMatrixHandler;
@@ -164,15 +169,17 @@ public class CubeActivity extends AppCompatActivity implements GLSurfaceView.Ren
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
-        GLES20.glViewport(0,0,width,height);
+        GLES20.glViewport(0, 0, width, height);
         //计算宽高比
-        float ratio=(float)width/height;
+        float ratio = (float) width / height;
         //设置透视投影
-        Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
+//        Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 100);
+        Matrix.orthoM(mProjectMatrix, 0, 0, width, 0, height, 3, 7);
         //设置相机位置
-        Matrix.setLookAtM(mViewMatrix, 0, 5.0f, 10.0f, 5.0f, 0f, 0f, 0f, 0f,1.0f, 0.0f);
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         //计算变换矩阵
-        Matrix.multiplyMM(mMVPMatrix,0,mProjectMatrix,0,mViewMatrix,0);
+        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectMatrix, 0, mMVPMatrix, 0);
     }
 
     @Override
@@ -191,7 +198,7 @@ public class CubeActivity extends AppCompatActivity implements GLSurfaceView.Ren
         //启用顶点的句柄
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         //准备坐标数据
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false,0, vertexBuffer);
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
 
         //获取片元着色器句柄
         mColorHandle = GLES20.glGetAttribLocation(mProgram, "aColor");

@@ -1,7 +1,6 @@
 package com.vison.opengl_learning.egl.view;
 
 import com.vison.opengl_learning.egl.filter.type.FilterType;
-import com.vison.opengl_learning.egl.filter.type.ScaleType;
 
 import java.nio.ByteBuffer;
 

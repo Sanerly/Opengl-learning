@@ -21,6 +21,7 @@ import com.vison.opengl_learning.egl.manager.RecordManager;
 import com.vison.opengl_learning.egl.view.GlESView;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 
 import butterknife.BindView;
@@ -49,12 +50,21 @@ public class EGLActivity extends AppCompatActivity {
     Button btnZoomIn;
     @BindView(R.id.btn_zoom_out)
     Button btnZoomOut;
+    @BindView(R.id.btn_translation_up)
+    Button btnTranslationUp;
+    @BindView(R.id.btn_translation_down)
+    Button btnTranslationDown;
+    @BindView(R.id.btn_translation_left)
+    Button btnTranslationLeft;
+    @BindView(R.id.btn_translation_right)
+    Button btnTranslationRight;
     private Bitmap mBitmap1;
     private Bitmap mBitmap2;
     private boolean isShow = false;
     private ByteBuffer buffer1;
     private ByteBuffer buffer2;
     private String storagePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +86,7 @@ public class EGLActivity extends AppCompatActivity {
 
         glesView.setBuffer(buffer1, mBitmap1.getWidth(), mBitmap1.getHeight());
         mHandler.sendEmptyMessageDelayed(1, 1000);
-
+        Log.e("storagePath", storagePath);
 
     }
 
@@ -98,7 +108,9 @@ public class EGLActivity extends AppCompatActivity {
 
     @OnClick({R.id.btn_record, R.id.btn_stop, R.id.btn_1,
             R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_photo,
-            R.id.btn_zoom_in, R.id.btn_zoom_out})
+            R.id.btn_zoom_in, R.id.btn_zoom_out,
+            R.id.btn_translation_up, R.id.btn_translation_down,
+            R.id.btn_translation_left, R.id.btn_translation_right})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_record:
@@ -122,6 +134,8 @@ public class EGLActivity extends AppCompatActivity {
                 }
                 long time = System.currentTimeMillis();
                 final String outputPath = storagePath + time + "_1.mp4";
+                Log.d("EGLActivity", "outputPath = " + outputPath);
+
                 RecordManager.getInstance().setOutputPath(outputPath);
                 // 初始化录制器
                 RecordManager.getInstance().initRecorder(RecordManager.RECORD_WIDTH,
@@ -183,16 +197,81 @@ public class EGLActivity extends AppCompatActivity {
                 glesView.setFilterType(FilterType.SPLITSCREEN);
                 break;
             case R.id.btn_zoom_in:
-                zoomVal=zoomVal+0.1f;
-                glesView.setZoomScale(zoomVal);
+                mZoomCount++;
+                mZoomScale = mZoomScale + 0.1f;
+                glesView.setZoomScale(mZoomScale);
+                if (mZoomCount==0){
+                    mTranslationYCount=0;
+                    mTranslationXCount=0;
+                    mTranslationY=0;
+                    mTranslationX=0;
+                }
                 break;
             case R.id.btn_zoom_out:
-                zoomVal=zoomVal-0.1f;
-                glesView.setZoomScale(zoomVal);
+                mZoomCount--;
+                mZoomScale = mZoomScale - 0.1f;
+                glesView.setZoomScale(mZoomScale);
+                if (mZoomCount==0){
+                    mTranslationYCount=0;
+                    mTranslationXCount=0;
+                    mTranslationY=0;
+                    mTranslationX=0;
+                }
+                break;
+            case R.id.btn_translation_up:
+                if (mTranslationYCount < mZoomCount) {
+                    mTranslationY = mTranslationY + 0.1f;
+                    glesView.setTranslation(mTranslationX, mTranslationY);
+                    mTranslationYCount++;
+                }
+                Log.e("mTranslationY", (mTranslationYCount) + "_" + (mZoomCount) + "_" + (mTranslationY));
+
+
+                break;
+            case R.id.btn_translation_down:
+
+                if (mTranslationYCount > -mZoomCount) {
+                    mTranslationY = mTranslationY - 0.1f;
+                    mTranslationYCount--;
+                    glesView.setTranslation(mTranslationX, mTranslationY);
+                }
+
+
+                Log.e("mTranslationY", (mTranslationYCount) + "_" + (mZoomCount) + "_" + (mTranslationY));
+
+                break;
+            case R.id.btn_translation_left:
+
+                if (mTranslationXCount > -mZoomCount) {
+                    mTranslationX = mTranslationX - 0.1f;
+                    glesView.setTranslation(mTranslationX, mTranslationY);
+                    mTranslationXCount--;
+                }
+
+                break;
+            case R.id.btn_translation_right:
+                if (mTranslationXCount < mZoomCount) {
+                    mTranslationX = mTranslationX + 0.1f;
+                    glesView.setTranslation(mTranslationX, mTranslationY);
+                    mTranslationXCount++;
+                }
                 break;
         }
     }
-        float zoomVal=1.0f;
+
+    private int getBig(float val) {
+        return (int) (val * 10);
+    }
+
+    private float mTranslationX;
+    private float mTranslationY;
+    private float mTranslationYUp;
+    private float mTranslationYDown;
+    private float mLastTranslationY;
+    private float mZoomScale = 1.0f;
+    private int mZoomCount = 0;
+    private int mTranslationYCount = 0;
+    private int mTranslationXCount = 0;
 
     /**
      * @方法描述 Bitmap转RGB

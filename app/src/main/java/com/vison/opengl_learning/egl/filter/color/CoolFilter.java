@@ -3,7 +3,7 @@ package com.vison.opengl_learning.egl.filter.color;
 import android.opengl.GLES30;
 
 import com.vison.opengl_learning.egl.filter.base.AFilter;
-import com.vison.opengl_learning.egl.gles.GlUtils;
+import com.vison.opengl_learning.egl.util.GlUtils;
 
 /**
  * 冷色调

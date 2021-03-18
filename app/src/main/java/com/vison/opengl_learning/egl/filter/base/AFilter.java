@@ -4,10 +4,11 @@ import android.graphics.PointF;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
+import android.util.Log;
 
-import com.vison.opengl_learning.egl.gles.TextureRotationUtils;
-import com.vison.opengl_learning.egl.gles.GlUtils;
-import com.vison.opengl_learning.egl.gles.MatrixUtils;
+import com.vison.opengl_learning.egl.util.TextureRotationUtils;
+import com.vison.opengl_learning.egl.util.GlUtils;
+import com.vison.opengl_learning.egl.util.MatrixUtils;
 
 import java.nio.FloatBuffer;
 import java.util.Arrays;
@@ -23,13 +24,12 @@ public class AFilter {
     protected static final String VERTEX_SHADER =
             "uniform mat4 uMVPMatrix;                                           \n" +
                     "uniform mat4 uTexMatrix;                                   \n" +
-                    "uniform float uScale;                                     \n" +
                     "attribute vec4 aPosition;                                  \n" +
                     "attribute vec4 aCoordinate;                                \n" +
                     "varying vec2 vCoordinate;                                  \n" +
                     "void main() {                                              \n" +
-                    "    vec4 position = vec4(aPosition.x * uScale, aPosition.y * uScale, aPosition.zw);              \n" +
-                    "    gl_Position = uMVPMatrix * position;                  \n" +
+//                    "    vec4 position = vec4(aPosition.x * 1.5, aPosition.y * 1.5, aPosition.zw);              \n" +
+                    "    gl_Position = uMVPMatrix * aPosition;                  \n" +
                     "    vCoordinate =(uTexMatrix * aCoordinate).xy;            \n" +
                     "}                                                          \n";
 
@@ -38,9 +38,18 @@ public class AFilter {
                     "varying vec2 vCoordinate;                                  \n" +
                     "uniform sampler2D uTexture;                                \n" +
                     "void main() {                                              \n" +
-                    "    gl_FragColor = texture2D(uTexture, vCoordinate);       \n" +
-                    "}                                                          \n";
+                    "     vec2 uv = vCoordinate.xy;                         \n" +
 
+//                    "               uv.y = uv.y *1.5;                                 \n" +
+//                    "               uv.x = uv.x *1.5;                                 \n" +
+//                    "     if (uv.y >= 0.0 && uv.y < 1.0/3.0) {                   \n" +
+//                    "           uv.y = uv.y + 1.0/3.0;                     \n" +
+//                    "     } else if(uv.y >2.0/3.0){                         \n" +
+//                    "           uv.y = uv.y - 1.0/3.0;                                 \n" +
+//                    "     }                                                 \n" +
+
+                    "    gl_FragColor = texture2D(uTexture, uv);       \n" +
+                    "}                                                          \n";
 
 
     /**
@@ -76,8 +85,6 @@ public class AFilter {
      */
     protected int mTexMatrixHandle;
 
-
-    protected int mScaleHandle;
 
     /**
      * 纹理句柄
@@ -116,6 +123,9 @@ public class AFilter {
     // 缩放矩阵
     protected float[] mTexMatrix = new float[16];
 
+    protected float[] mZoomMatrix = new float[16];
+
+
     // 模型矩阵欧拉角的实际角度
     protected float mYawAngle = 0.0f;
     protected float mPitchAngle = 0.0f;
@@ -149,7 +159,7 @@ public class AFilter {
         //缩放矩阵句柄
         mTexMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uTexMatrix");
         //缩放顶点坐标句柄
-        mScaleHandle = GLES20.glGetUniformLocation(mProgram, "uScale");
+//        mScaleHandle = GLES20.glGetUniformLocation(mProgram, "uScale");
         //获取纹理句柄
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTexture");
 
@@ -215,7 +225,7 @@ public class AFilter {
         //缩放矩阵句柄
         GLES30.glUniformMatrix4fv(mTexMatrixHandle, 1, false, mTexMatrix, 0);
 
-        GLES30.glUniform1f(mScaleHandle, mZoomScale);
+//        GLES30.glUniform1f(mScaleHandle, mZoomScale);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(getTextureType(), textureId);
@@ -274,7 +284,7 @@ public class AFilter {
         //缩放矩阵句柄
         GLES30.glUniformMatrix4fv(mTexMatrixHandle, 1, false, mTexMatrix, 0);
 
-        GLES30.glUniform1f(mScaleHandle, mZoomScale);
+//        GLES30.glUniform1f(mScaleHandle, mZoomScale);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(getTextureType(), textureId);
@@ -366,23 +376,39 @@ public class AFilter {
         Matrix.setIdentityM(mTexMatrix, 0);
     }
 
+    private float mTranslationX = 0f;
+    private float mTranslationY = 0f;
+
     /**
      * 计算视锥体变换矩阵(MVPMatrix)
      */
     public void calculateMVPMatrix() {
         // 模型矩阵变换
         Matrix.setIdentityM(mModelMatrix, 0); // 重置模型矩阵方便计算
-        Matrix.rotateM(mModelMatrix, 0, mYawAngle, 1.0f, 0, 0);
-        Matrix.rotateM(mModelMatrix, 0, mPitchAngle, 0, 1.0f, 0);
-        Matrix.rotateM(mModelMatrix, 0, mRollAngle, 0, 0, 1.0f);
-//        Matrix.scaleM(mModelMatrix, 0,  mScale, mScale, mScale);
-        // 综合矩阵变换
+        Matrix.setIdentityM(mProjectionMatrix, 0);
+//        Matrix.setIdentityM(mZoomMatrix, 0);
+//        Matrix.rotateM(mModelMatrix, 0, mYawAngle, 1.0f, 0, 0);
+//        Matrix.rotateM(mModelMatrix, 0, mPitchAngle, 0, 1.0f, 0);
+//        Matrix.rotateM(mModelMatrix, 0, mRollAngle, 0, 0, 1.0f);
+
+        Matrix.translateM(mModelMatrix, 0, mTranslationX/mZoomScale, mTranslationY/mZoomScale, 0);
+        Matrix.scaleM(mModelMatrix, 0, mZoomScale, mZoomScale, 0f);
+        //保证缩放在当前视图的中心
+        Matrix.translateM(mModelMatrix, 0, -mTranslationX/mZoomScale, -mTranslationY/mZoomScale, 0);
+
+//        Matrix.multiplyMM(mModelMatrix, 0, mZoomMatrix, 0, mModelMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
     }
 
+
+    public void setTranslation(float translationX, float translationY) {
+        this.mTranslationX = translationX;
+        this.mTranslationY = translationY;
+    }
+
     /**
-     * 设置投影矩阵
+     * 设置视图矩阵
      *
      * @param matrix
      */
